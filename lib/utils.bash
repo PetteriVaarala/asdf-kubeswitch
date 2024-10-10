@@ -13,7 +13,7 @@ fail() {
 
 curl_opts=(-fsSL)
 
-if [ -n "${GITHUB_API_TOKEN:-}" ]; then
+if [ -n "${GITHUB_API_TOKEN-}" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
 

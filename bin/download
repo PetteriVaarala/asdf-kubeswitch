@@ -8,34 +8,6 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 # shellcheck source=./lib/utils.bash
 source "${plugin_dir}/lib/utils.bash"
 
-# function get_os {
-#   case "$(uname -s)" in
-#   #Darwin*) echo "macos" ;;
-#   Linux*) echo "linux" ;;
-#   *)
-#     echo "Unsupported OS"
-#     exit 1
-#     ;;
-#   esac
-# }
-
-# function get_arch {
-#   case "$(uname -m)" in
-#   #aarch64 | arm64) echo "arm64" ;;
-#   #i386 | i686) echo "i386" ;;
-#   x86_64) echo "amd64" ;;
-#   *)
-#     echo "Unsupported architecture"
-#     exit 1
-#     ;;
-#   esac
-# }
-# os=$(get_os)
-# arch=$(get_arch)
-
-# https://github.com/danielfoehrKn/kubeswitch/releases/download/0.9.1/switcher_linux_amd64
-
-
 mkdir -p "$ASDF_DOWNLOAD_PATH"
 
 # TODO: Adapt this to proper extension and adapt extracting strategy.
