@@ -39,7 +39,8 @@ download_release() {
 	filename="$2"
 
 	# TODO: Adapt the release URL convention for kubeswitch
-	url="$GH_REPO/archive/${version}.tar.gz"
+	# https://github.com/danielfoehrKn/kubeswitch/releases/download/0.9.1/switcher_linux_amd64
+	url="$GH_REPO/releases/download/${version}/switcher_darwin_amd64"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
