@@ -17,6 +17,30 @@ if [ -n "${GITHUB_API_TOKEN-}" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
 
+function get_os {
+	case "$(uname -s)" in
+	Darwin*) echo "darwin" ;;
+	Linux*) echo "linux" ;;
+	*)
+		echo "Unsupported OS"
+		exit 1
+		;;
+	esac
+}
+os=$(get_os)
+
+function get_arch {
+	case "$(uname -m)" in
+	aarch64 | arm64) echo "arm64" ;;
+	x86_64) echo "amd64" ;;
+	*)
+		echo "Unsupported architecture"
+		exit 1
+		;;
+	esac
+}
+arch=$(get_arch)
+
 sort_versions() {
 	sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z\1/; s/$/.z/; G; s/\n/ /' |
 		LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
@@ -38,7 +62,7 @@ download_release() {
 	filename="$2"
 
 	# https://github.com/danielfoehrKn/kubeswitch/releases/download/0.9.1/switcher_linux_amd64
-	url="$GH_REPO/releases/download/${version}/switcher_linux_amd64"
+	url="$GH_REPO/releases/download/${version}/switcher_${os}_${arch}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
