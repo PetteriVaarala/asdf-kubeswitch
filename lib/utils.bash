@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for kubeswitch.
 GH_REPO="https://github.com/danielfoehrKn/kubeswitch"
 TOOL_NAME="kubeswitch"
 TOOL_TEST="switch --version"
@@ -31,8 +30,6 @@ list_github_tags() {
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if kubeswitch has other means of determining installable versions.
 	list_github_tags
 }
 
@@ -42,7 +39,7 @@ download_release() {
 	filename="$2"
 
 	# TODO: Adapt the release URL convention for kubeswitch
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	url="$GH_REPO/archive/${version}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
