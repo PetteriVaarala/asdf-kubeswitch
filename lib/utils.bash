@@ -4,7 +4,7 @@ set -euo pipefail
 
 GH_REPO="https://github.com/danielfoehrKn/kubeswitch"
 TOOL_NAME="kubeswitch"
-TOOL_TEST="switch --version"
+TOOL_TEST="switcher --version"
 
 fail() {
 	echo -e "asdf-$TOOL_NAME: $*"
@@ -13,7 +13,6 @@ fail() {
 
 curl_opts=(-fsSL)
 
-# NOTE: You might want to remove this if kubeswitch is not hosted on GitHub releases.
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
@@ -38,9 +37,8 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for kubeswitch
 	# https://github.com/danielfoehrKn/kubeswitch/releases/download/0.9.1/switcher_linux_amd64
-	url="$GH_REPO/releases/download/${version}/switcher_darwin_amd64"
+	url="$GH_REPO/releases/download/${version}/switcher_linux_amd64"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -56,13 +54,15 @@ install_version() {
 	fi
 
 	(
-		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
-
-		# TODO: Assert kubeswitch executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
+
+		mkdir -p "$install_path"
+		cp -r "$ASDF_DOWNLOAD_PATH"/* "${install_path}/${tool_cmd}"
+		chmod +x "${install_path}/${tool_cmd}"
+
+		# Assert kubeswitch executable exists.
+		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/${tool_cmd} to be executable."
 
 		echo "$TOOL_NAME $version installation was successful!"
 	) || (
